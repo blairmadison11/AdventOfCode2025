@@ -7,10 +7,10 @@ Console.WriteLine(sum);
 
 class Database
 {
-    private List<(long start, long end)> ranges;
+    private HashSet<(long start, long end)> ranges;
     public Database(string[] lines)
     {
-        ranges = new List<(long,long)>();
+        ranges = new HashSet<(long,long)>();
         foreach (var line in lines)
         {
             AddRange(line);
@@ -30,40 +30,26 @@ class Database
     private void AddRange(string line)
     {
         var nums = line.Split('-').Select(d => long.Parse(d)).ToArray();
-        var start = GetRange(nums[0]);
-        var end = GetRange(nums[1]);
-        var overlapping = new List<(long,long)>();
-        if (start != null) overlapping.Add(((long, long))start);
-        if (end != null) overlapping.Add(((long, long))end);
-        overlapping.Add((nums[0],nums[1]));
-        AddCombinedRange(overlapping);
+        AddCombinedRange(GetOverlappingRanges((nums[0],nums[1])));
     }
 
-    private (long,long)? GetRange(long num)
+    private HashSet<(long,long)> GetOverlappingRanges((long start, long end) newrange)
     {
+        var set = new HashSet<(long,long)>() { newrange };
         foreach (var range in ranges)
         {
-            if (num >= range.start && num <= range.end)
-                return range;
+            if ((newrange.start >= range.start && newrange.start <= range.end + 1) ||
+                (newrange.end >= range.start - 1 && newrange.end <= range.end) ||
+                (range.start >= newrange.start && range.end <= newrange.end))
+                set.Add(range);
         }
-        return null;
+        return set;
     }
 
-    private void AddCombinedRange(List<(long,long)> overlapping)
+    private void AddCombinedRange(HashSet<(long,long)> overlapping)
     {
         var nums = overlapping.Aggregate(new List<long>(), (a, c) => {a.Add(c.Item1); a.Add(c.Item2); return a;}).ToArray();
-        foreach(var range in overlapping)
-        {
-            ranges.Remove(range);
-        }
+        ranges.ExceptWith(overlapping);
         ranges.Add((nums.Min(), nums.Max()));
-    }
-
-    public void PrintRanges()
-    {
-        foreach(var range in ranges)
-        {
-            Console.WriteLine(range.ToString());
-        }
     }
 }
