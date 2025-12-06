@@ -25,8 +25,7 @@ using (var reader = new StreamReader("input.txt"))
 ulong sum = 0;
 for (int i = 0; i < nums[0].Length; ++i)
 {
-    var op = ops[i];
-    if (op == '+')
+    if (ops[i] == '+')
     {
         sum += nums.Aggregate((ulong)0, (a, c) => a + c[i]);
     }
