@@ -1,6 +1,5 @@
 var grid = File.ReadAllLines("input.txt").Select(l => l.ToCharArray()).ToArray();
 var beams = new Dictionary<int,ulong>() { { Array.IndexOf(grid[0], 'S'), 1} };
-var lastpos = grid[0].Length - 1;
 for (int i = 1; i < grid.Length; ++i)
 {
     var nextBeams = new Dictionary<int,ulong>(beams);
