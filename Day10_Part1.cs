@@ -9,7 +9,7 @@ class Machine
 
     public Machine(string data)
     {
-        lights = Regex.Match(data, @"\[([\.\#]+)\]").Groups[1].Value.ToCharArray().Select(c => c == '#').ToArray();
+        lights = Regex.Match(data, @"\[([\.\#]+)\]").Groups[1].Value.Select(c => c == '#').ToArray();
         buttons = Regex.Matches(data, @"\(([\d,]+)\)").Select(m => m.Groups[1].Value.Split(',').Select(d => int.Parse(d)).ToHashSet()).ToArray();
     }
 
