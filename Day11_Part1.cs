@@ -2,10 +2,9 @@ Console.WriteLine(new Graph(File.ReadAllLines("input.txt")).GetNumPaths());
 
 class Graph
 {
-    private int numNodes = 0;
+    private int numNodes = 0, start = 0, end = 0;
     private Dictionary<string, int> nodeLookup = new Dictionary<string, int>();
     private Dictionary<int, HashSet<int>> connections = new Dictionary<int, HashSet<int>>();
-    private int start = 0, end = 0;
 
     public Graph(string[] lines)
     {
